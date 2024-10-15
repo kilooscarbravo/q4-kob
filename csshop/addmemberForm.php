@@ -16,6 +16,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="mcss.css" rel="stylesheet" type="text/css" />
     <script src="mpage.js"></script>
+    <script>
+      var xmlHttp;
+      function checkUsername() {
+        document.getElementById("username").className = "thinking";
+        
+        xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = showUsernameStatus;
+        
+        var username = document.getElementById("username").value;
+        var url = "checkName.php?username=" + username;
+        xmlHttp.open("GET", url);
+        xmlHttp.send();
+      }
+
+      function showUsernameStatus() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+          if (xmlHttp.responseText == "okay") {
+            document.getElementById("username").className = "approved";
+
+          } else {
+            document.getElementById("username").className = "denied";
+            document.getElementById("username").focus();
+            document.getElementById("username").select();
+          }
+        }
+      }
+    </script>
   </head>
 
   <style>
@@ -51,7 +78,7 @@
     <main>
       <article>
         <form action="addmember.php" method="post" enctype="multipart/form-data">
-            Username : <input type="text" name="username" ><br>
+            Username : <input type="text" name="username" id="username" onblur="checkUsername()"><br>
             Password : <input type="text" name="password"><br>
             ชื่อสมาชิก : <input type="text" name="name"><br>
             ที่อยู่ : <br>
